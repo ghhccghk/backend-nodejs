@@ -19,8 +19,8 @@ echo "=====[Building Node.js]====="
 
 export CC=clang
 export CXX=clang++
-export CXXFLAGS="-stdlib=libc++"
-export LDFLAGS="-stdlib=libc++"
+export CXXFLAGS="-stdlib=libc++ -include cstdint"
+export LDFLAGS="-stdlib=libc++ -Wl -z common-page-size=16384"
 
 ./configure --shared
 make -j8
