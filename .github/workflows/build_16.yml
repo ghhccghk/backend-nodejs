@@ -189,7 +189,7 @@ jobs:
       - name: Install NDK
         run: |
           cd ~
-          wget -O NDK -q https://dl.google.com/android/repository/android-ndk-r21b-linux-x86_64.zip
+          wget -O NDK -q https://dl.google.com/android/repository/android-ndk-r28b-linux.zip
           sudo apt install unzip -y
           unzip -q NDK
       - name: Build
@@ -222,7 +222,7 @@ jobs:
       - name: Install NDK
         run: |
           cd ~
-          wget -O NDK -q https://dl.google.com/android/repository/android-ndk-r21b-linux-x86_64.zip
+          wget -O NDK -q https://dl.google.com/android/repository/android-ndk-r28b-linux.zip
           sudo apt install unzip -y
           unzip -q NDK
       - name: Build
@@ -251,7 +251,7 @@ jobs:
       - name: Install NDK
         run: |
           cd ~
-          wget -O NDK -q https://dl.google.com/android/repository/android-ndk-r21b-linux-x86_64.zip
+          wget -O NDK -q https://dl.google.com/android/repository/android-ndk-r28b-linux.zip
           sudo apt install unzip -y
           unzip -q NDK
       - name: Build
@@ -284,7 +284,7 @@ jobs:
       - name: Install NDK
         run: |
           cd ~
-          wget -O NDK -q https://dl.google.com/android/repository/android-ndk-r21b-linux-x86_64.zip
+          wget -O NDK -q https://dl.google.com/android/repository/android-ndk-r28b-linux.zip
           sudo apt install unzip -y
           unzip -q NDK
       - name: Build
