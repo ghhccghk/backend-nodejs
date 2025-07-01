@@ -19,7 +19,7 @@ jobs:
     - name: Setup Python 3.10
       uses: actions/setup-python@v4
       with:
-        python-version: 3.10
+        python-version: 3.9
     - name: npm install
       shell: bash
       run: npm install
@@ -51,7 +51,7 @@ jobs:
     - name: Setup Python 3.10
       uses: actions/setup-python@v4
       with:
-        python-version: 3.10
+        python-version: 3.9
     - name: npm install
       shell: bash
       run: npm install
@@ -83,7 +83,7 @@ jobs:
     - name: Setup Python 3.10
       uses: actions/setup-python@v4
       with:
-        python-version: 3.10
+        python-version: 3.9
     - name: npm install
       shell: bash
       run: npm install
@@ -107,7 +107,7 @@ jobs:
     - name: Setup Python 3.10
       uses: actions/setup-python@v4
       with:
-        python-version: 3.10
+        python-version: 3.9
     - name: npm install
       shell: bash
       run: npm install
@@ -134,7 +134,7 @@ jobs:
     - name: Setup Python 3.10
       uses: actions/setup-python@v4
       with:
-        python-version: 3.10
+        python-version: 3.9
     - name: npm install
       shell: bash
       run: npm install
@@ -158,7 +158,7 @@ jobs:
     - name: Setup Python 3.10
       uses: actions/setup-python@v4
       with:
-        python-version: 3.10
+        python-version: 3.9
     - name: npm install
       shell: bash
       run: npm install
@@ -182,7 +182,7 @@ jobs:
       - name: Setup Python 3.10
         uses: actions/setup-python@v4
         with:
-          python-version: 3.10
+          python-version: 3.9
       - name: npm install
         shell: bash
         run: npm install
@@ -215,7 +215,7 @@ jobs:
       - name: Setup Python 3.10
         uses: actions/setup-python@v4
         with:
-          python-version: 3.10
+          python-version: 3.9
       - name: npm install
         shell: bash
         run: npm install
@@ -244,7 +244,7 @@ jobs:
       - name: Setup Python 3.10
         uses: actions/setup-python@v4
         with:
-          python-version: 3.10
+          python-version: 3.9
       - name: npm install
         shell: bash
         run: npm install
@@ -277,7 +277,7 @@ jobs:
       - name: Setup Python 3.10
         uses: actions/setup-python@v4
         with:
-          python-version: 3.10
+          python-version: 3.9
       - name: npm install
         shell: bash
         run: npm install
