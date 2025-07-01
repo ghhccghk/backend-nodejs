@@ -41,7 +41,7 @@ node $WORKSPACE/node-script/make_v8_inspector_export.js
 echo "=====[Building Node.js]====="
 
 cp $WORKSPACE/android-configure ./
-./android-configure ~/android-ndk-r21b $2 24 $WITH_SSL
+./android-configure ~/android-ndk-r28b $2 24 $WITH_SSL
 make LDFLAGS="-stdlib=libc++ -Wl,-z,common-page-size=16384" CXXFLAGS="-stdlib=libc++ -include cstdint" -j8
 
 mkdir -p ../puerts-node/nodejs/lib/Android/$OUTPUT/
