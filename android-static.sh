@@ -43,7 +43,7 @@ node $WORKSPACE/node-script/make_v8_inspector_export.js
 echo "=====[Building Node.js]====="
 
 cp $WORKSPACE/android-configure-static ./
-./android-configure-static ~/android-ndk-r21b $2 24 $WITH_SSL
+./android-configure-static ~/android-ndk-r28b $2 24 $WITH_SSL
 make -j8
 
 mkdir -p ../puerts-node/nodejs/lib/Android/$OUTPUT/
