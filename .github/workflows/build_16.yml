@@ -154,6 +154,10 @@ jobs:
     name: linux
     runs-on: ubuntu-latest
     steps:
+    - name: Install gcc-multilib g++-multilib
+      run: |
+            sudo apt-get update
+            sudo apt-get install gcc-multilib g++-multilib build-essential g++ gcc
     - uses: actions/checkout@v2
     - name: Setup Python 3.10
       uses: actions/setup-python@v4
@@ -178,6 +182,10 @@ jobs:
   build_android_arm64_shared:
     runs-on: ubuntu-latest
     steps:
+      - name: Install gcc-multilib g++-multilib
+        run: |
+            sudo apt-get update
+            sudo apt-get install gcc-multilib g++-multilib build-essential g++ gcc
       - uses: actions/checkout@v2
       - name: Setup Python 3.10
         uses: actions/setup-python@v4
@@ -210,7 +218,7 @@ jobs:
       - name: Install gcc-multilib g++-multilib
         run: |
           sudo apt-get update
-          sudo apt-get install gcc-multilib g++-multilib
+          sudo apt-get install gcc-multilib g++-multilib build-essential g++ gcc
       - uses: actions/checkout@v2
       - name: Setup Python 3.10
         uses: actions/setup-python@v4
@@ -240,6 +248,10 @@ jobs:
   build_android_arm64:
     runs-on: ubuntu-latest
     steps:
+      - name: Install gcc-multilib g++-multilib
+        run: |
+            sudo apt-get update
+            sudo apt-get install gcc-multilib g++-multilib build-essential g++ gcc
       - uses: actions/checkout@v2
       - name: Setup Python 3.10
         uses: actions/setup-python@v4
