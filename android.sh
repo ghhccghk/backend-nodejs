@@ -42,7 +42,7 @@ echo "=====[Building Node.js]====="
 
 cp $WORKSPACE/android-configure ./
 ./android-configure ~/android-ndk-r28b $2 24 $WITH_SSL
-make LDFLAGS="-stdlib=libc++ -Wl,-z,common-page-size=16384" CXXFLAGS="-stdlib=libc++ -include cstdint" -j8
+make LDFLAGS="-stdlib=libc++ -Wl,-z,common-page-size=16384" CXXFLAGS="-stdlib=libc++ -include cstdint"  CXXFLAGS="-include cstdint" CPPFLAGS="-include cstdint" -j8
 
 mkdir -p ../puerts-node/nodejs/lib/Android/$OUTPUT/
 
