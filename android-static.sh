@@ -44,7 +44,7 @@ echo "=====[Building Node.js]====="
 
 cp $WORKSPACE/android-configure-static ./
 ./android-configure-static ~/android-ndk-r28b $2 24 $WITH_SSL
-make -j8
+make  CXXFLAGS="-include cstdint" CPPFLAGS="-include cstdint"  -j8
 
 mkdir -p ../puerts-node/nodejs/lib/Android/$OUTPUT/
 
