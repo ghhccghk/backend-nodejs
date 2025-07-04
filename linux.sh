@@ -4,26 +4,25 @@ HOMEPATH=~
 VERSION=$1
 
 cd $HOMEPATH
-git clone https://github.com/nodejs/node.git
+git clone --depth 1 --branch v22.17.0 https://github.com/nodejs/node.git
 
 cd node
-git fetch origin v$VERSION
-git checkout v$VERSION
+patch -p1 < $WORKSPACE/patchs/my_changes.patch
 
-echo "=====[Patching Node.js]====="
-node $WORKSPACE/node-script/do-gitpatch.js -p $WORKSPACE/patchs/lib_uv_add_on_watcher_queue_updated_v$VERSION.patch
-node $WORKSPACE/node-script/add_arraybuffer_new_without_stl.js deps/v8
-node $WORKSPACE/node-script/make_v8_inspector_export.js
+#echo "=====[Patching Node.js]====="
+#node $WORKSPACE/node-script/do-gitpatch.js -p $WORKSPACE/patchs/lib_uv_add_on_watcher_queue_updated_v$VERSION.patch
+#node $WORKSPACE/node-script/add_arraybuffer_new_without_stl.js deps/v8
+#node $WORKSPACE/node-script/make_v8_inspector_export.js
 
 echo "=====[Building Node.js]====="
 
 export CC=clang
 export CXX=clang++
-export CXXFLAGS="-stdlib=libc++ -include cstdint"
-export LDFLAGS="-stdlib=libc++ -Wl -z common-page-size=16384"
+#export CXXFLAGS="-stdlib=libc++ -include cstdint"
+#export LDFLAGS="-stdlib=libc++ -Wl -z common-page-size=16384"
 
-./configure --shared
-make -j8
+./android-configure ~/android-ndk-r27c 27 arm64
+make -j4 LDFLAGS="-Wl,-z,max-page-size=16384"
 
 mkdir -p ../puerts-node/nodejs/include
 mkdir -p ../puerts-node/nodejs/deps/uv/include

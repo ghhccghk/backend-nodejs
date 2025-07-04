@@ -159,16 +159,21 @@ jobs:
             sudo apt-get update
             sudo apt-get install gcc-multilib g++-multilib build-essential g++ gcc
     - uses: actions/checkout@v2
-    - name: Setup Python 3.10
+    - name: Setup Python 3.11
       uses: actions/setup-python@v4
       with:
-        python-version: 3.9
-    - name: npm install
-      shell: bash
-      run: npm install
+        python-version: 3.11
+    - name: Install NDK
+      run: |
+        cd ~
+        wget -O NDK -q https://dl.google.com/android/repository/android-ndk-r27c-linux.zip
+        sudo apt install unzip -y
+        unzip -q NDK
     - name: Run build script
       run: |
         cd $GITHUB_WORKSPACE
+        export CXX_host="clang++"
+        export CC_host="clang"
         sh ./linux.sh ${{env.VERSION}}
     - name: Rename
       run: |
