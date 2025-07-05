@@ -2,9 +2,29 @@
 WORKSPACE=$GITHUB_WORKSPACE
 HOMEPATH=~
 VERSION=$1
+ARCH="$2"
+
+case $ARCH in
+    arm)
+        OUTPUT="armeabi-v7a"
+        ;;
+    x86)
+        OUTPUT="x86"
+        ;;
+    x86_64)
+        OUTPUT="x64"
+        ;;
+    arm64|aarch64)
+        OUTPUT="arm64-v8a"
+        ;;
+    *)
+        echo "Unsupported architecture provided: $ARCH"
+        exit 1
+        ;;
+esac
 
 cd ~/android-ndk-r27c
-~/android-ndk-r27c/ndk-build APP_ABI=arm64-v8a APP_BUILD_SCRIPT="~/android-ndk-r27c/sources/android/cpufeatures/Android.mk" APP_PLATFORM=29
+~/android-ndk-r27c/ndk-build APP_ABI=OUTPUT NDK_PROJECT_PATH="~/android-ndk-r27c" APP_BUILD_SCRIPT="~/android-ndk-r27c/sources/android/cpufeatures/Android.mk" APP_PLATFORM=29
 
 cd $HOMEPATH
 git clone --depth 1 --branch v22.17.0 https://github.com/nodejs/node.git
@@ -26,8 +46,8 @@ export CXX=clang++
 #export CXXFLAGS="-stdlib=libc++ -include cstdint"
 #export LDFLAGS="-stdlib=libc++ -Wl -z common-page-size=16384"
 
-./android-configure ~/android-ndk-r27c 29 arm64
-make -j30 LDFLAGS="-Wl,-z,max-page-size=16384 -L~/android-ndk-r27c/obj/local/arm64-v8a -lcpufeatures"
+./android-configure ~/android-ndk-r27c 29 $ARCH
+make -j30 LDFLAGS="-Wl,-z,max-page-size=16384 -L~/android-ndk-r27c/obj/local/$OUTPUT -lcpufeatures"
 
 mkdir -p ../puerts-node/nodejs/include
 mkdir -p ../puerts-node/nodejs/deps/uv/include

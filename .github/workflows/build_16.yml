@@ -11,146 +11,7 @@ env:
   VERSION: 16.16.0
 
 jobs:
-  build_windows:
-    name: Windows
-    runs-on: windows-2025
-    steps:
-    - uses: actions/checkout@v2
-    - name: Setup Python 3.10
-      uses: actions/setup-python@v4
-      with:
-        python-version: 3.9
-    - name: npm install
-      shell: bash
-      run: npm install
-    - name: Run build script
-      continue-on-error: true
-      shell: cmd
-      run: |
-        cd %GITHUB_WORKSPACE%
-        call .\windows_trybuild.cmd ${{env.VERSION}}
-    - name: Run upload script
-      shell: cmd
-      run: |
-        cd %GITHUB_WORKSPACE%
-        call .\windows_64.cmd
-    - name: Rename
-      shell: bash
-      run: |
-        mv puerts-node/nodejs puerts-node/nodejs_16
-    - uses: actions/upload-artifact@v4
-      with:
-        name: nodejs_bin
-        path: puerts-node
-
-  build_windows_32:
-    name: Windows-32
-    runs-on: windows-2025
-    steps:
-    - uses: actions/checkout@v2
-    - name: Setup Python 3.10
-      uses: actions/setup-python@v4
-      with:
-        python-version: 3.9
-    - name: npm install
-      shell: bash
-      run: npm install
-    - name: Run build script
-      continue-on-error: true
-      shell: cmd
-      run: |
-        cd %GITHUB_WORKSPACE%
-        call .\windows_trybuild.cmd ${{env.VERSION}}
-    - name: Run upload script
-      shell: cmd
-      run: |
-        cd %GITHUB_WORKSPACE%
-        call .\windows_32.cmd
-    - name: Rename
-      shell: bash
-      run: |
-        mv puerts-node/nodejs puerts-node/nodejs_16
-    - uses: actions/upload-artifact@v4
-      with:
-        name: nodejs_bin
-        path: puerts-node
-
-  build_macos:
-    name: macOS
-    runs-on: macos-15
-    steps:
-    - uses: actions/checkout@v2
-    - name: Setup Python 3.10
-      uses: actions/setup-python@v4
-      with:
-        python-version: 3.9
-    - name: npm install
-      shell: bash
-      run: npm install
-    - name: Run build script
-      run: |
-        cd $GITHUB_WORKSPACE
-        sh ./macos.sh ${{env.VERSION}}
-    - name: Rename
-      run: |
-        mv ~/puerts-node/nodejs ~/puerts-node/nodejs_16
-    - uses: actions/upload-artifact@v4
-      with:
-        name: nodejs_bin
-        path: ~/puerts-node
-
-  build_macos_arm64:
-    name: macOS with apple m1
-    runs-on: macos-15
-    steps:
-    - uses: actions/checkout@v2
-    - name: Setup Python 3.10
-      uses: actions/setup-python@v4
-      with:
-        python-version: 3.9
-    - name: npm install
-      shell: bash
-      run: npm install
-    - name: Run build script
-      run: |
-        cd $GITHUB_WORKSPACE
-        sh ./macos_arm64.sh ${{env.VERSION}}
-    - name: Rename
-      run: |
-        mv ~/puerts-node/nodejs ~/puerts-node/nodejs_16
-    - uses: actions/upload-artifact@v4
-      with:
-        name: nodejs_bin
-        path: ~/puerts-node
-
-  build_ios:
-    name: iOS
-    runs-on: macos-15
-    steps:
-    - uses: maxim-lobanov/setup-xcode@v1
-      with:
-        xcode-version: '12'
-    - uses: actions/checkout@v2
-    - name: Setup Python 3.10
-      uses: actions/setup-python@v4
-      with:
-        python-version: 3.9
-    - name: npm install
-      shell: bash
-      run: npm install
-    - name: Run build script
-      run: |
-        cd $GITHUB_WORKSPACE
-        sh ./ios.sh ${{env.VERSION}}
-    - name: Rename
-      run: |
-        mv ~/puerts-node/nodejs ~/puerts-node/nodejs_16
-    - uses: actions/upload-artifact@v4
-      with:
-        name: nodejs_bin
-        path: ~/puerts-node
-
-  build_linux:
+  build_android_arm64:
     name: linux
     runs-on: ubuntu-latest
     steps:
@@ -174,50 +35,18 @@ jobs:
         cd $GITHUB_WORKSPACE
         export CXX_host="clang++"
         export CC_host="clang"
-        sh ./linux.sh ${{env.VERSION}}
+        sh ./linux.sh ${{env.VERSION}} arm64
     - name: Rename
       run: |
         mv ~/puerts-node/nodejs ~/puerts-node/nodejs_16
         cp $GITHUB_WORKSPACE/puer-build.json ~/puerts-node/nodejs_16
     - uses: actions/upload-artifact@v4
       with:
-        name: nodejs_bin
+        name: nodejs_bin_arm64
         path: ~/puerts-node
 
-  build_android_arm64_shared:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Install gcc-multilib g++-multilib
-        run: |
-            sudo apt-get update
-            sudo apt-get install gcc-multilib g++-multilib build-essential g++ gcc
-      - uses: actions/checkout@v2
-      - name: Setup Python 3.10
-        uses: actions/setup-python@v4
-        with:
-          python-version: 3.9
-      - name: npm install
-        shell: bash
-        run: npm install
-      - name: Install NDK
-        run: |
-          cd ~
-          wget -O NDK -q https://dl.google.com/android/repository/android-ndk-r28b-linux.zip
-          sudo apt install unzip -y
-          unzip -q NDK
-      - name: Build
-        run: |
-          cd $GITHUB_WORKSPACE
-          sh ./android.sh ${{env.VERSION}} arm64
-      - name: Rename
-        run: |
-          mv ~/puerts-node/nodejs ~/puerts-node/nodejs_16
-      - uses: actions/upload-artifact@v4
-        with:
-          name: nodejs_bin
-          path: ~/puerts-node
-
-  build_android_armv7_shared:
+  build_android_armv7:
+    name: linux
     runs-on: ubuntu-latest
     steps:
       - name: Install gcc-multilib g++-multilib
@@ -225,92 +54,26 @@ jobs:
           sudo apt-get update
           sudo apt-get install gcc-multilib g++-multilib build-essential g++ gcc
       - uses: actions/checkout@v2
-      - name: Setup Python 3.10
+      - name: Setup Python 3.11
         uses: actions/setup-python@v4
         with:
-          python-version: 3.9
-      - name: npm install
-        shell: bash
-        run: npm install
+          python-version: 3.11
       - name: Install NDK
         run: |
           cd ~
-          wget -O NDK -q https://dl.google.com/android/repository/android-ndk-r28b-linux.zip
+          wget -O NDK -q https://dl.google.com/android/repository/android-ndk-r27c-linux.zip
           sudo apt install unzip -y
           unzip -q NDK
-      - name: Build
+      - name: Run build script
         run: |
           cd $GITHUB_WORKSPACE
-          sh ./android.sh ${{env.VERSION}} arm
+          export CXX_host="clang++"
+          export CC_host="clang"
+          sh ./linux.sh ${{env.VERSION}} arm
       - name: Rename
         run: |
           mv ~/puerts-node/nodejs ~/puerts-node/nodejs_16
-      - uses: actions/upload-artifact@v4
-        with:
-          name: nodejs_bin
-          path: ~/puerts-node
-
-  build_android_arm64:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Install gcc-multilib g++-multilib
-        run: |
-            sudo apt-get update
-            sudo apt-get install gcc-multilib g++-multilib build-essential g++ gcc
-      - uses: actions/checkout@v2
-      - name: Setup Python 3.10
-        uses: actions/setup-python@v4
-        with:
-          python-version: 3.9
-      - name: npm install
-        shell: bash
-        run: npm install
-      - name: Install NDK
-        run: |
-          cd ~
-          wget -O NDK -q https://dl.google.com/android/repository/android-ndk-r28b-linux.zip
-          sudo apt install unzip -y
-          unzip -q NDK
-      - name: Build
-        run: |
-          cd $GITHUB_WORKSPACE
-          bash ./android-static.sh ${{env.VERSION}} arm64
-      - name: Rename
-        run: |
-          mv ~/puerts-node/nodejs ~/puerts-node/nodejs_16
-      - uses: actions/upload-artifact@v4
-        with:
-          name: nodejs_bin
-          path: ~/puerts-node
-
-  build_android_armv7:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Install gcc-multilib g++-multilib
-        run: |
-          sudo apt-get update
-          sudo apt-get install gcc-multilib g++-multilib
-      - uses: actions/checkout@v2
-      - name: Setup Python 3.10
-        uses: actions/setup-python@v4
-        with:
-          python-version: 3.9
-      - name: npm install
-        shell: bash
-        run: npm install
-      - name: Install NDK
-        run: |
-          cd ~
-          wget -O NDK -q https://dl.google.com/android/repository/android-ndk-r28b-linux.zip
-          sudo apt install unzip -y
-          unzip -q NDK
-      - name: Build
-        run: |
-          cd $GITHUB_WORKSPACE
-          bash ./android-static.sh ${{env.VERSION}} arm
-      - name: Rename
-        run: |
-          mv ~/puerts-node/nodejs ~/puerts-node/nodejs_16
+          cp $GITHUB_WORKSPACE/puer-build.json ~/puerts-node/nodejs_16
       - uses: actions/upload-artifact@v4
         with:
           name: nodejs_bin
@@ -319,10 +82,7 @@ jobs:
   publish:
     runs-on: ubuntu-latest
     needs: [
-      build_windows, build_windows_32, build_macos,
-      build_macos_arm64, build_linux, build_ios,
-      build_android_arm64, build_android_armv7,
-      build_android_arm64_shared, build_android_armv7_shared
+      build_android_arm64, build_android_armv7
     ]
     steps:
       - uses: actions/download-artifact@v4
