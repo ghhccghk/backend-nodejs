@@ -3,6 +3,9 @@ WORKSPACE=$GITHUB_WORKSPACE
 HOMEPATH=~
 VERSION=$1
 
+cd ~/android-ndk-r27c
+~/android-ndk-r27c/ndk-build APP_ABI=arm64-v8a APP_BUILD_SCRIPT="~/android-ndk-r27c/sources/android/cpufeatures/Android.mk" APP_PLATFORM=29
+
 cd $HOMEPATH
 git clone --depth 1 --branch v22.17.0 https://github.com/nodejs/node.git
 
@@ -18,11 +21,13 @@ echo "=====[Building Node.js]====="
 
 export CC=clang
 export CXX=clang++
+
+
 #export CXXFLAGS="-stdlib=libc++ -include cstdint"
 #export LDFLAGS="-stdlib=libc++ -Wl -z common-page-size=16384"
 
-./android-configure ~/android-ndk-r27c 27 arm64
-make -j16 LDFLAGS="-Wl,-z,max-page-size=16384"
+./android-configure ~/android-ndk-r27c 29 arm64
+make -j16 LDFLAGS="-Wl,-z,max-page-size=16384 -L~/android-ndk-r27c/obj/local/arm64-v8a -lcpufeatures"
 
 mkdir -p ../puerts-node/nodejs/include
 mkdir -p ../puerts-node/nodejs/deps/uv/include
