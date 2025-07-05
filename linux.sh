@@ -24,7 +24,7 @@ case $ARCH in
 esac
 
 cd ~/android-ndk-r27c
-~/android-ndk-r27c/ndk-build APP_ABI=OUTPUT NDK_PROJECT_PATH="~/android-ndk-r27c" APP_BUILD_SCRIPT="~/android-ndk-r27c/sources/android/cpufeatures/Android.mk" APP_PLATFORM=29
+~/android-ndk-r27c/ndk-build APP_ABI=$OUTPUT NDK_PROJECT_PATH="~/android-ndk-r27c" APP_BUILD_SCRIPT="~/android-ndk-r27c/sources/android/cpufeatures/Android.mk" APP_PLATFORM=29
 
 cd $HOMEPATH
 git clone --depth 1 --branch v22.17.0 https://github.com/nodejs/node.git

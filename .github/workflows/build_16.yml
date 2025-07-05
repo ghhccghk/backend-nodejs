@@ -12,7 +12,7 @@ env:
 
 jobs:
   build_android_arm64:
-    name: linux
+    name: build_android_arm64
     runs-on: ubuntu-latest
     steps:
     - name: Install gcc-multilib g++-multilib
@@ -46,7 +46,7 @@ jobs:
         path: ~/puerts-node
 
   build_android_armv7:
-    name: linux
+    name: build_android_armv7
     runs-on: ubuntu-latest
     steps:
       - name: Install gcc-multilib g++-multilib
