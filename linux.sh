@@ -27,7 +27,7 @@ export CXX=clang++
 #export LDFLAGS="-stdlib=libc++ -Wl -z common-page-size=16384"
 
 ./android-configure ~/android-ndk-r27c 29 arm64
-make -j16 LDFLAGS="-Wl,-z,max-page-size=16384 -L~/android-ndk-r27c/obj/local/arm64-v8a -lcpufeatures"
+make -j30 LDFLAGS="-Wl,-z,max-page-size=16384 -L~/android-ndk-r27c/obj/local/arm64-v8a -lcpufeatures"
 
 mkdir -p ../puerts-node/nodejs/include
 mkdir -p ../puerts-node/nodejs/deps/uv/include
