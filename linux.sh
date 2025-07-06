@@ -12,7 +12,7 @@ case $ARCH in
         OUTPUT="x86"
         ;;
     x86_64)
-        OUTPUT="x64"
+        OUTPUT="x86_64"
         ;;
     arm64|aarch64)
         OUTPUT="arm64-v8a"
