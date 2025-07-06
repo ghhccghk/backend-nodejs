@@ -114,7 +114,7 @@ jobs:
           path: ~/puerts-node
 
   build_android_x64:
-    name: build_android_x86
+    name: build_android_x64
     runs-on: ubuntu-latest
     steps:
       - name: Install gcc-multilib g++-multilib
@@ -137,7 +137,7 @@ jobs:
           cd $GITHUB_WORKSPACE
           export CXX_host="clang++"
           export CC_host="clang"
-          sh ./linux.sh ${{env.VERSION}} x64
+          sh ./linux.sh ${{env.VERSION}} x86_64
       - name: Rename
         run: |
           mv ~/puerts-node/nodejs ~/puerts-node/nodejs_16

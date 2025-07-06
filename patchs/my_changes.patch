@@ -12,6 +12,28 @@ index 5cea0393..0aa3c63a 100644
  if os.path.exists("./configure"):
 -    os.system("./configure --dest-cpu=" + DEST_CPU + " --dest-os=android --openssl-no-asm --cross-compiling")
 +    os.system("./configure --dest-cpu=" + DEST_CPU + " --dest-os=android --cross-compiling --openssl-no-asm --partly-static --with-intl=none --shared")
+diff --git a/deps/v8/src/base/debug/stack_trace_posix.cc b/deps/v8/src/base/debug/stack_trace_posix.cc
+index 0a22cc8a..2ebc0077 100644
+--- a/deps/v8/src/base/debug/stack_trace_posix.cc
++++ b/deps/v8/src/base/debug/stack_trace_posix.cc
+@@ -37,6 +37,17 @@
+ #include <AvailabilityMacros.h>
+ #endif
+
++#if defined(__ANDROID__)
++extern "C" int backtrace(void**, int) {
++  return 0;
++}
++
++extern "C" char** backtrace_symbols(void* const*, int) {
++  return nullptr;
++}
++#endif
++
++
+ #include "src/base/build_config.h"
+ #include "src/base/free_deleter.h"
+ #include "src/base/logging.h"
 diff --git a/deps/v8/src/base/small-vector.h b/deps/v8/src/base/small-vector.h
 index edaab3a7..16d6c616 100644
 --- a/deps/v8/src/base/small-vector.h
