@@ -45,7 +45,8 @@ export CXX=clang++
 
 
 ./android-configure ~/android-ndk-r27c 29 $ARCH
-make -j30 LDFLAGS="-Wl,-z,max-page-size=16384 -L/home/runner/android-ndk-r27c/obj/local/$OUTPUT -lcpufeatures"
+make -j30 LDFLAGS="-Wl,-z,max-page-size=16384 -L/home/runner/android-ndk-r27c/obj/local/$OUTPUT -lcpufeatures --gc-sections " CFLAGS="-Os -fdata-sections -ffunction-sections"
+/home/runner/android-ndk-r27c/toolchains/llvm/prebuilt/linux-x86_64/bin/llvm-strip --strip-unneeded out/Release/libnode.so
 
 mkdir -p ../puerts-node/nodejs/include
 mkdir -p ../puerts-node/nodejs/deps/uv/include

@@ -1,0 +1,184 @@
+name: build nodejs v22 Lts
+
+on: 
+  workflow_dispatch:
+    inputs:
+      tag_date:
+        description: 'tag date'     
+        required: true
+
+env:
+  VERSION: 22.17.0
+
+jobs:
+  build_android_arm64:
+    name: build_android_arm64
+    runs-on: ubuntu-latest
+    steps:
+    - name: Install gcc-multilib g++-multilib
+      run: |
+            sudo apt-get update
+            sudo apt-get install gcc-multilib g++-multilib build-essential g++ gcc
+    - uses: actions/checkout@v2
+    - name: Setup Python 3.11
+      uses: actions/setup-python@v4
+      with:
+        python-version: 3.11
+    - name: Install NDK
+      run: |
+        cd ~
+        wget -O NDK -q https://dl.google.com/android/repository/android-ndk-r27c-linux.zip
+        sudo apt install unzip -y
+        unzip -q NDK
+    - name: Run build script
+      run: |
+        cd $GITHUB_WORKSPACE
+        export CXX_host="clang++"
+        export CC_host="clang"
+        sh ./linux.sh ${{env.VERSION}} arm64
+    - name: Rename
+      run: |
+        mv ~/puerts-node/nodejs ~/puerts-node/nodejs_16
+        cp $GITHUB_WORKSPACE/puer-build.json ~/puerts-node/nodejs_16
+    - uses: actions/upload-artifact@v4
+      with:
+        name: nodejs_bin_arm64
+        path: ~/puerts-node
+
+  build_android_armv7:
+    name: build_android_armv7
+    runs-on: ubuntu-latest
+    steps:
+      - name: Install gcc-multilib g++-multilib
+        run: |
+          sudo apt-get update
+          sudo apt-get install gcc-multilib g++-multilib build-essential g++ gcc
+      - uses: actions/checkout@v2
+      - name: Setup Python 3.11
+        uses: actions/setup-python@v4
+        with:
+          python-version: 3.11
+      - name: Install NDK
+        run: |
+          cd ~
+          wget -O NDK -q https://dl.google.com/android/repository/android-ndk-r27c-linux.zip
+          sudo apt install unzip -y
+          unzip -q NDK
+      - name: Run build script
+        run: |
+          cd $GITHUB_WORKSPACE
+          export CXX_host="clang++"
+          export CC_host="clang"
+          sh ./linux.sh ${{env.VERSION}} arm
+      - name: Rename
+        run: |
+          mv ~/puerts-node/nodejs ~/puerts-node/nodejs_16
+          cp $GITHUB_WORKSPACE/puer-build.json ~/puerts-node/nodejs_16
+      - uses: actions/upload-artifact@v4
+        with:
+          name: nodejs_bin
+          path: ~/puerts-node
+
+  build_android_x86:
+    name: build_android_x86
+    runs-on: ubuntu-latest
+    steps:
+      - name: Install gcc-multilib g++-multilib
+        run: |
+          sudo apt-get update
+          sudo apt-get install gcc-multilib g++-multilib build-essential g++ gcc
+      - uses: actions/checkout@v2
+      - name: Setup Python 3.11
+        uses: actions/setup-python@v4
+        with:
+          python-version: 3.11
+      - name: Install NDK
+        run: |
+          cd ~
+          wget -O NDK -q https://dl.google.com/android/repository/android-ndk-r27c-linux.zip
+          sudo apt install unzip -y
+          unzip -q NDK
+      - name: Run build script
+        run: |
+          cd $GITHUB_WORKSPACE
+          export CXX_host="clang++"
+          export CC_host="clang"
+          sh ./linux.sh ${{env.VERSION}} x86
+      - name: Rename
+        run: |
+          mv ~/puerts-node/nodejs ~/puerts-node/nodejs_16
+          cp $GITHUB_WORKSPACE/puer-build.json ~/puerts-node/nodejs_16
+      - uses: actions/upload-artifact@v4
+        with:
+          name: nodejs_bin_arm64
+          path: ~/puerts-node
+
+  build_android_x64:
+    name: build_android_x86
+    runs-on: ubuntu-latest
+    steps:
+      - name: Install gcc-multilib g++-multilib
+        run: |
+          sudo apt-get update
+          sudo apt-get install gcc-multilib g++-multilib build-essential g++ gcc
+      - uses: actions/checkout@v2
+      - name: Setup Python 3.11
+        uses: actions/setup-python@v4
+        with:
+          python-version: 3.11
+      - name: Install NDK
+        run: |
+          cd ~
+          wget -O NDK -q https://dl.google.com/android/repository/android-ndk-r27c-linux.zip
+          sudo apt install unzip -y
+          unzip -q NDK
+      - name: Run build script
+        run: |
+          cd $GITHUB_WORKSPACE
+          export CXX_host="clang++"
+          export CC_host="clang"
+          sh ./linux.sh ${{env.VERSION}} x64
+      - name: Rename
+        run: |
+          mv ~/puerts-node/nodejs ~/puerts-node/nodejs_16
+          cp $GITHUB_WORKSPACE/puer-build.json ~/puerts-node/nodejs_16
+      - uses: actions/upload-artifact@v4
+        with:
+          name: nodejs_bin_arm64
+          path: ~/puerts-node
+
+  publish:
+    runs-on: ubuntu-latest
+    needs: [
+      build_android_arm64, build_android_armv7
+    ]
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: nodejs_bin
+          path: nodejs_bin/
+
+      - name: Create Release Asset
+        run: |
+          cd nodejs_bin/ && tar cvfz ../nodejs_bin_${{env.VERSION}}.tgz nodejs_16 && cd -
+
+      - name: Create Release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: NodeJS_${{env.VERSION}}_${{ github.event.inputs.tag_date }}
+          release_name: NodeJS_${{env.VERSION}}_${{ github.event.inputs.tag_date }}
+          draft: false
+          prerelease: false
+
+      - name: Upload nodejs_bin
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./nodejs_bin_${{env.VERSION}}.tgz
+          asset_name: nodejs_bin_${{env.VERSION}}.tgz
+          asset_content_type: application/tgz
