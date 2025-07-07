@@ -153,14 +153,35 @@ jobs:
       build_android_arm64, build_android_armv7,build_android_x86,build_android_x64
     ]
     steps:
-      - uses: actions/download-artifact@v4
+      - name: Download ARM64 artifact
+        uses: actions/download-artifact@v4
         with:
-          name: nodejs_bin
-          path: nodejs_bin/
+          name: nodejs_bin_arm64
+          path: nodejs_bin/nodejs_bin_arm64
+
+      - name: Download ARMv7 artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: nodejs_bin_arm
+          path: nodejs_bin/nodejs_bin_arm
+
+      - name: Download x86 artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: nodejs_bin_x86
+          path: nodejs_bin/nodejs_bin_x86
+
+      - name: Download x64 artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: nodejs_bin_x64
+          path: nodejs_bin/nodejs_bin_x64
 
       - name: Create Release Asset
         run: |
-          cd nodejs_bin/ && tar cvfz ../nodejs_bin_${{env.VERSION}}.tgz nodejs_16 && cd -
+          cd nodejs_bin
+          tar -czf ../nodejs_bin_${{env.VERSION}}.tgz *
+          cd -
 
       - name: Create Release
         id: create_release
