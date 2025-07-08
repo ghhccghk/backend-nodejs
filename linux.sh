@@ -39,8 +39,8 @@ patch -p1 < $WORKSPACE/patchs/my_changes.patch
 
 echo "=====[Building Node.js]====="
 
-export CC=clang
-export CXX=clang++
+#export CC=clang
+#export CXX=clang++
 
 
 

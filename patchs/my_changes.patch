@@ -1,8 +1,20 @@
 diff --git a/android_configure.py b/android_configure.py
-index 5cea0393..0aa3c63a 100644
+index 5cea0393..c86024f8 100644
 --- a/android_configure.py
 +++ b/android_configure.py
-@@ -71,7 +71,8 @@ GYP_DEFINES += " v8_target_arch=" + arch
+@@ -63,15 +63,18 @@ elif platform.system() == "Linux":
+     toolchain_path = android_ndk_path + "/toolchains/llvm/prebuilt/linux-x86_64"
+
+ os.environ['PATH'] += os.pathsep + toolchain_path + "/bin"
+-os.environ['CC'] = toolchain_path + "/bin/" + TOOLCHAIN_PREFIX + android_sdk_version + "-" +  "clang"
+-os.environ['CXX'] = toolchain_path + "/bin/" + TOOLCHAIN_PREFIX + android_sdk_version + "-" + "clang++"
++os.environ['CC_host'] = "clang-17"
++os.environ['CXX_host'] = "clang++-17"
++os.environ['CC_target'] = toolchain_path + "/bin/" + TOOLCHAIN_PREFIX + android_sdk_version + "-" +  "clang"
++os.environ['CXX_target'] = toolchain_path + "/bin/" + TOOLCHAIN_PREFIX + android_sdk_version + "-" + "clang++"
+
+ GYP_DEFINES = "target_arch=" + arch
+ GYP_DEFINES += " v8_target_arch=" + arch
  GYP_DEFINES += " android_target_arch=" + arch
  GYP_DEFINES += " host_os=" + host_os + " OS=android"
  GYP_DEFINES += " android_ndk_path=" + android_ndk_path
